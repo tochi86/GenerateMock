@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "893DFEB6-2DF0-4CF4-ACB3-7BC222D83C29",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "GenerateMockTests",
+        "name" : "GenerateMockTests"
+      }
+    }
+  ],
+  "version" : 1
+}

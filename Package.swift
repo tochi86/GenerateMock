@@ -21,6 +21,7 @@ let package = Package(
     dependencies: [
         // Depend on the Swift 5.9 release of SwiftSyntax
         .package(url: "https://github.com/apple/swift-syntax.git", from: "509.0.0"),
+        .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.0.0"),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -38,7 +39,16 @@ let package = Package(
         .target(name: "GenerateMock", dependencies: ["GenerateMockMacros"]),
 
         // A client of the library, which is able to use the macro in its own code.
-        .executableTarget(name: "GenerateMockClient", dependencies: ["GenerateMock"]),
+        .executableTarget(
+            name: "GenerateMockClient",
+            dependencies: [
+                "GenerateMock",
+                .product(name: "Dependencies", package: "swift-dependencies"),
+            ],
+            swiftSettings: [
+                .unsafeFlags(["-strict-concurrency=complete"])
+            ]
+        ),
 
         // A test target used to develop the macro implementation.
         .testTarget(
@@ -46,6 +56,15 @@ let package = Package(
             dependencies: [
                 "GenerateMockMacros",
                 .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax"),
+            ]
+        ),
+        .testTarget(
+            name: "GenerateMockClientTests",
+            dependencies: [
+                "GenerateMockClient"
+            ],
+            swiftSettings: [
+                .unsafeFlags(["-strict-concurrency=complete"])
             ]
         ),
     ]
